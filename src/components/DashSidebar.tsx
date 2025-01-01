@@ -3,18 +3,27 @@ import { useEffect, useState } from "react";
 import { HiArrowSmRight, HiDocumentText, HiUser } from "react-icons/hi";
 import { useLocation, useNavigate } from "react-router-dom";
 
-export default function DashSidebar() {
+interface DashSidebarProps {
+  setTab: (tab: string) => void;
+}
+
+export default function DashSidebar({ setTab }: DashSidebarProps) {
   const location = useLocation();
   const navigate = useNavigate();
-  const [tab, setTab] = useState("");
+  const [tab, setLocalTab] = useState("");
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const tabFromUrl = urlParams.get("tab");
     if (tabFromUrl) {
-      setTab(tabFromUrl);
+      setLocalTab(tabFromUrl);
     }
   }, [location.search]);
+
+  const handleNavigation = (tabName: string) => {
+    setTab(tabName); // Cập nhật trạng thái trong Dashboard
+    navigate(`/dashboard?tab=${tabName}`);
+  };
 
   return (
     <Sidebar className='w-full md:w-56'>
@@ -23,14 +32,14 @@ export default function DashSidebar() {
           <Sidebar.Item
             active={tab === "profile"}
             icon={HiUser}
-            onClick={() => navigate("/dashboard?tab=profile")}
+            onClick={() => handleNavigation("profile")}
           >
             Profile
           </Sidebar.Item>
           <Sidebar.Item
             active={tab === "posts"}
             icon={HiDocumentText}
-            onClick={() => navigate("/dashboard?tab=posts")}
+            onClick={() => handleNavigation("posts")}
           >
             Posts
           </Sidebar.Item>
