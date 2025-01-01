@@ -49,7 +49,7 @@ export default function SignIn() {
       if (res.ok) {
         localStorage.setItem("token", data.data.accessToken);
         dispatch(signInSuccess(data));
-        navigate("/create-post", { replace: true });
+        navigate("/dashboard", { replace: true });
       }
     } catch (error: any) {
       dispatch(signInFailure(error.message));

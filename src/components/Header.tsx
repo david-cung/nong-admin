@@ -7,7 +7,7 @@ const Header = () => {
     <header
       style={{
         width: "100%",
-        backgroundColor: "#f0f0f0", // Hoặc màu nền bạn muốn
+        backgroundColor: "#0056b3", // Hoặc màu nền bạn muốn
         padding: "10px 0", // Khoảng cách trên và dưới của header
         position: "fixed",
         top: 0,

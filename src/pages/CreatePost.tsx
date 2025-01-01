@@ -76,16 +76,25 @@ export default function CreatePost() {
         setPublishError("Failed to publish post");
         return;
       }
+      console.log(data);
       setPublishError(null);
-      navigate(`/posts/${data.data.id}`, { replace: true });
+      navigate(`/posts/${data.data}`, { replace: true });
     } catch (error: any) {
       setPublishError(error.message);
     }
   };
+
   return (
-    <div className='p-3 max-w-3xl mx-auto min-h-screen'>
-      <h1 className='text-center text-3xl my-7 font-semibold'>CreatePost</h1>
-      <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
+    <div
+      className='p-3 max-w-3xl mx-auto min-h-screen'
+      style={{ paddingTop: "60px" }} // Khoảng cách để tránh bị header che khuất
+    >
+      <h1 className='text-center text-3xl my-7 font-semibold'>Create Post</h1>
+      <form
+        className='flex flex-col gap-4'
+        style={{ minHeight: "calc(100vh - 120px)" }} // Giảm chiều cao của phần header và tạo đủ không gian cho form
+        onSubmit={handleSubmit}
+      >
         <div className='flex flex-col gap-4 sm:flex-row justify-between'>
           <TextInput
             type='text'
@@ -96,17 +105,9 @@ export default function CreatePost() {
               setFormData({ ...formData, title: e.target.value })
             }
           />
-          <Select
-            onChange={(e) =>
-              setFormData({ ...formData, category: e.target.value })
-            }
-          >
-            <option value='uncategorized'>Select a category</option>
-            <option value='javascript'>JavaScript</option>
-            <option value='reactjs'>React.js</option>
-            <option value='nextjs'>Next.js</option>
-          </Select>
         </div>
+
+        {/* Upload image section */}
         <div className='flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3'>
           <FileInput
             type='file'
@@ -135,7 +136,15 @@ export default function CreatePost() {
             )}
           </Button>
         </div>
-        {imageUploadError && <Alert className='mt-5' color='failure'></Alert>}
+
+        {/* Show image upload error */}
+        {imageUploadError && (
+          <Alert className='mt-5' color='failure'>
+            {imageUploadError}
+          </Alert>
+        )}
+
+        {/* Show uploaded image */}
         {formData.image && (
           <img
             src={formData.image}
@@ -143,6 +152,8 @@ export default function CreatePost() {
             className='w-full h-72 object-cover'
           />
         )}
+
+        {/* Content editor */}
         <ReactQuill
           theme='snow'
           placeholder='Write something...'
@@ -151,9 +162,16 @@ export default function CreatePost() {
             setFormData({ ...formData, content: value });
           }}
         />
-        <Button type='submit' gradientDuoTone='purpleToPink'>
+
+        {/* Publish button */}
+        <Button
+          type='submit'
+          className='bg-gradient-to-r from-blue-500 to-green-500 text-white p-2 rounded mt-5'
+        >
           Publish
         </Button>
+
+        {/* Show publish error */}
         {publishError && (
           <Alert className='mt-5' color='failure'>
             {publishError}
