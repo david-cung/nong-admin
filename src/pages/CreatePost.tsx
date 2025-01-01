@@ -5,7 +5,7 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { Alert, Button, FileInput, Select, TextInput } from "flowbite-react";
+import { Alert, Button, FileInput, TextInput } from "flowbite-react";
 import { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -84,6 +84,14 @@ export default function CreatePost() {
     }
   };
 
+  const handleContentChange = (value: string) => {
+    const cleanedContent = value.trim().replace(/^<p>(.*?)<\/p>$/s, "$1");
+    setFormData((prevData) => ({
+      ...prevData,
+      content: cleanedContent,
+    }));
+  };
+
   return (
     <div
       className='p-3 max-w-3xl mx-auto min-h-screen'
@@ -158,9 +166,7 @@ export default function CreatePost() {
           theme='snow'
           placeholder='Write something...'
           className='h-72 mb-12'
-          onChange={(value) => {
-            setFormData({ ...formData, content: value });
-          }}
+          onChange={handleContentChange}
         />
 
         {/* Publish button */}
