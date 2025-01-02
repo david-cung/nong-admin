@@ -1,3 +1,4 @@
+// PostList.tsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +7,7 @@ interface Post {
   title: string;
   image: string;
   content: string;
+  updatedAt: string;
 }
 
 export default function PostList() {
@@ -29,104 +31,159 @@ export default function PostList() {
     fetchPosts();
   }, []);
 
+  const handleDelete = (id: string) => {
+    // Xử lý xoá bài viết theo id
+    console.log(`Delete post with id: ${id}`);
+    // Call API xoá bài viết
+  };
+
+  const handleEdit = (id: string) => {
+    // Chuyển hướng đến trang chỉnh sửa bài viết
+    navigate(`/edit-post/${id}`);
+  };
+
   return (
     <div
       style={{
-        marginTop: "60px", // Để tránh bị che khuất bởi header
-        padding: "20px",
+        width: "100%", // Full chiều rộng
+        height: "100%", // Full chiều cao
+        overflowY: "auto", // Thêm thanh cuộn nếu bảng quá dài
       }}
     >
-      <div
+      <table
         style={{
           width: "100%",
-          display: "flex",
-          justifyContent: "flex-end",
-          marginBottom: "20px",
+          height: "100%",
+          borderCollapse: "collapse", // Xoá khoảng cách giữa các ô
+          border: "1px solid #ddd",
         }}
       >
-        <button
-          onClick={() => navigate("/create-post")}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "#4CAF50",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-            fontSize: "16px",
-          }}
-        >
-          Tạo bài viết
-        </button>
-      </div>
-
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", // Điều chỉnh để bài viết có kích thước lớn hơn
-          gap: "20px", // Khoảng cách giữa các bài viết
-        }}
-      >
-        {posts.length > 0 ? (
-          posts.map((post, index) => (
-            <div
-              key={index}
+        <thead>
+          <tr>
+            <th
               style={{
-                display: "flex",
-                flexDirection: "row",
-                gap: "20px", // Khoảng cách giữa hình ảnh và nội dung
-                border: "1px solid #ddd",
-                borderRadius: "8px",
-                padding: "20px",
-                backgroundColor: "#fff",
-                boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)", // Thêm bóng nhẹ cho bài viết
-                height: "auto", // Tự động điều chỉnh chiều cao
+                padding: "2px", // Giảm padding trong header
+                textAlign: "left",
+                backgroundColor: "#4CAF50",
+                color: "white",
               }}
             >
-              <img
-                src={post.image}
-                alt={post.title}
+              Ngày Cập Nhật
+            </th>
+            <th
+              style={{
+                padding: "2px", // Giảm padding trong header
+                textAlign: "left",
+                backgroundColor: "#4CAF50",
+                color: "white",
+              }}
+            >
+              Hình Ảnh
+            </th>
+            <th
+              style={{
+                padding: "2px", // Giảm padding trong header
+                textAlign: "left",
+                backgroundColor: "#4CAF50",
+                color: "white",
+              }}
+            >
+              Tiêu Đề
+            </th>
+            <th
+              style={{
+                padding: "2px", // Giảm padding trong header
+                textAlign: "center",
+                backgroundColor: "#4CAF50",
+                color: "white",
+              }}
+            >
+              Thao Tác
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {posts.map((post, index) => (
+            <tr
+              key={index}
+              style={{
+                borderBottom: "0.5px solid #ddd", // Giảm khoảng cách giữa các dòng thêm 80%
+                padding: "2px", // Giảm padding cho mỗi dòng
+              }}
+            >
+              <td
                 style={{
-                  width: "150px", // Tăng kích thước hình ảnh
-                  height: "150px",
-                  objectFit: "cover",
-                  borderRadius: "8px",
+                  padding: "2px", // Giảm padding giữa các item
+                  textAlign: "left",
+                  fontSize: "16px", // Tăng kích thước chữ 70%
                 }}
-              />
-
-              <div style={{ flex: 1 }}>
-                <h3
+              >
+                {new Date(post.updatedAt).toLocaleDateString()}
+              </td>
+              <td
+                style={{
+                  padding: "2px", // Giảm padding giữa các item
+                  textAlign: "left",
+                }}
+              >
+                <img
+                  src={post.image}
+                  alt={post.title}
                   style={{
-                    margin: "0 0 10px",
-                    fontSize: "24px", // Tăng kích thước tiêu đề
-                    fontWeight: "bold", // In đậm tiêu đề
-                    color: "#333",
+                    width: "150px", // Kích thước ảnh lớn hơn
+                    height: "150px",
+                    objectFit: "cover",
+                    borderRadius: "5px",
+                  }}
+                />
+              </td>
+              <td
+                style={{
+                  padding: "2px", // Giảm padding giữa các item
+                  textAlign: "left",
+                  fontSize: "16px", // Tăng kích thước chữ tiêu đề 70%
+                }}
+              >
+                {post.title}
+              </td>
+              <td
+                style={{
+                  padding: "2px", // Giảm padding giữa các item
+                  textAlign: "center",
+                }}
+              >
+                <button
+                  onClick={() => handleEdit(post.title)}
+                  style={{
+                    padding: "5px 10px", // Tăng kích thước nút lên 70%
+                    backgroundColor: "#FFA500",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                    marginRight: "5px", // Giảm khoảng cách giữa các nút
                   }}
                 >
-                  {post.title}
-                </h3>
-                <p
+                  Chỉnh Sửa
+                </button>
+                <button
+                  onClick={() => handleDelete(post.title)}
                   style={{
-                    margin: 0,
-                    fontSize: "16px", // Tăng kích thước chữ nội dung
-                    color: "#666",
-                    lineHeight: "1.8",
-                    display: "-webkit-box",
-                    WebkitLineClamp: 4, // Tăng số dòng nội dung hiển thị
-                    WebkitBoxOrient: "vertical",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
+                    padding: "5px 10px", // Tăng kích thước nút lên 70%
+                    backgroundColor: "#FF5733",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "5px",
+                    cursor: "pointer",
                   }}
                 >
-                  {post.content}
-                </p>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p>No posts available.</p>
-        )}
-      </div>
+                  Xoá
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

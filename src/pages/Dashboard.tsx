@@ -21,7 +21,7 @@ export default function Dashboard() {
   return (
     <div
       className='min-h-screen flex flex-col'
-      style={{ marginTop: "60px" }} // Thêm marginTop để tránh che khuất nội dung
+      style={{ marginTop: "60px", height: "100vh" }} // Đảm bảo chiều cao toàn bộ màn hình
     >
       <Header /> {/* Hiển thị header ở trên cùng */}
       <div className='flex flex-grow md:flex-row'>
@@ -30,7 +30,7 @@ export default function Dashboard() {
         </div>
         <div
           className='flex-grow flex items-center justify-center bg-gray-100'
-          style={{ padding: "20px" }}
+          style={{ padding: "20px", height: "calc(100vh - 60px)" }} // Đảm bảo chiều cao của phần nội dung chính
         >
           {tab === "profile" && <DashProfile />}
           {tab === "posts" && <PostList />}
