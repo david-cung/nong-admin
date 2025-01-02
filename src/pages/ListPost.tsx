@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 interface Post {
+  id: string;
   title: string;
   image: string;
   content: string;
@@ -12,6 +13,9 @@ interface Post {
 
 export default function PostList() {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState<
+    string | null
+  >(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,29 +36,44 @@ export default function PostList() {
   }, []);
 
   const handleDelete = (id: string) => {
-    // Xử lý xoá bài viết theo id
-    console.log(`Delete post with id: ${id}`);
-    // Call API xoá bài viết
+    setShowDeleteConfirmation(id);
+  };
+
+  const confirmDelete = async (id: string) => {
+    try {
+      await axios.delete(`/v1/posts/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setPosts(posts.filter((post) => post.id !== id));
+      setShowDeleteConfirmation(null);
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    }
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteConfirmation(null);
   };
 
   const handleEdit = (id: string) => {
-    // Chuyển hướng đến trang chỉnh sửa bài viết
     navigate(`/edit-post/${id}`);
   };
 
   return (
     <div
       style={{
-        width: "100%", // Full chiều rộng
-        height: "100%", // Full chiều cao
-        overflowY: "auto", // Thêm thanh cuộn nếu bảng quá dài
+        width: "100%",
+        height: "100%",
+        overflowY: "auto",
       }}
     >
       <table
         style={{
           width: "100%",
           height: "100%",
-          borderCollapse: "collapse", // Xoá khoảng cách giữa các ô
+          borderCollapse: "collapse",
           border: "1px solid #ddd",
         }}
       >
@@ -62,7 +81,7 @@ export default function PostList() {
           <tr>
             <th
               style={{
-                padding: "2px", // Giảm padding trong header
+                padding: "2px",
                 textAlign: "left",
                 backgroundColor: "#4CAF50",
                 color: "white",
@@ -72,7 +91,7 @@ export default function PostList() {
             </th>
             <th
               style={{
-                padding: "2px", // Giảm padding trong header
+                padding: "2px",
                 textAlign: "left",
                 backgroundColor: "#4CAF50",
                 color: "white",
@@ -82,7 +101,7 @@ export default function PostList() {
             </th>
             <th
               style={{
-                padding: "2px", // Giảm padding trong header
+                padding: "2px",
                 textAlign: "left",
                 backgroundColor: "#4CAF50",
                 color: "white",
@@ -92,7 +111,7 @@ export default function PostList() {
             </th>
             <th
               style={{
-                padding: "2px", // Giảm padding trong header
+                padding: "2px",
                 textAlign: "center",
                 backgroundColor: "#4CAF50",
                 color: "white",
@@ -103,26 +122,26 @@ export default function PostList() {
           </tr>
         </thead>
         <tbody>
-          {posts.map((post, index) => (
+          {posts.map((post) => (
             <tr
-              key={index}
+              key={post.id}
               style={{
-                borderBottom: "0.5px solid #ddd", // Giảm khoảng cách giữa các dòng thêm 80%
-                padding: "2px", // Giảm padding cho mỗi dòng
+                borderBottom: "0.5px solid #ddd",
+                padding: "2px",
               }}
             >
               <td
                 style={{
-                  padding: "2px", // Giảm padding giữa các item
+                  padding: "2px",
                   textAlign: "left",
-                  fontSize: "16px", // Tăng kích thước chữ 70%
+                  fontSize: "16px",
                 }}
               >
                 {new Date(post.updatedAt).toLocaleDateString()}
               </td>
               <td
                 style={{
-                  padding: "2px", // Giảm padding giữa các item
+                  padding: "2px",
                   textAlign: "left",
                 }}
               >
@@ -130,7 +149,7 @@ export default function PostList() {
                   src={post.image}
                   alt={post.title}
                   style={{
-                    width: "150px", // Kích thước ảnh lớn hơn
+                    width: "150px",
                     height: "150px",
                     objectFit: "cover",
                     borderRadius: "5px",
@@ -139,46 +158,81 @@ export default function PostList() {
               </td>
               <td
                 style={{
-                  padding: "2px", // Giảm padding giữa các item
+                  padding: "2px",
                   textAlign: "left",
-                  fontSize: "16px", // Tăng kích thước chữ tiêu đề 70%
+                  fontSize: "16px",
                 }}
               >
                 {post.title}
               </td>
               <td
                 style={{
-                  padding: "2px", // Giảm padding giữa các item
+                  padding: "2px",
                   textAlign: "center",
                 }}
               >
-                <button
-                  onClick={() => handleEdit(post.title)}
-                  style={{
-                    padding: "5px 10px", // Tăng kích thước nút lên 70%
-                    backgroundColor: "#FFA500",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                    marginRight: "5px", // Giảm khoảng cách giữa các nút
-                  }}
-                >
-                  Chỉnh Sửa
-                </button>
-                <button
-                  onClick={() => handleDelete(post.title)}
-                  style={{
-                    padding: "5px 10px", // Tăng kích thước nút lên 70%
-                    backgroundColor: "#FF5733",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                  }}
-                >
-                  Xoá
-                </button>
+                {showDeleteConfirmation === post.id ? (
+                  <div>
+                    <p>Bạn có chắc chắn muốn xoá dịch vụ này?</p>
+                    <button
+                      onClick={() => confirmDelete(post.id)}
+                      style={{
+                        padding: "5px 10px",
+                        backgroundColor: "#FF5733",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                        marginRight: "5px",
+                      }}
+                    >
+                      Xoá dịch vụ này
+                    </button>
+                    <button
+                      onClick={cancelDelete}
+                      style={{
+                        padding: "5px 10px",
+                        backgroundColor: "#808080",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Huỷ
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => handleEdit(post.id)}
+                      style={{
+                        padding: "5px 10px",
+                        backgroundColor: "#FFA500",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                        marginRight: "5px",
+                      }}
+                    >
+                      Chỉnh Sửa
+                    </button>
+                    <button
+                      onClick={() => handleDelete(post.id)}
+                      style={{
+                        padding: "5px 10px",
+                        backgroundColor: "#FF5733",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Xoá
+                    </button>
+                  </>
+                )}
               </td>
             </tr>
           ))}
