@@ -32,7 +32,7 @@ const Header = () => {
         <div
           className='logo'
           style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
-          onClick={() => navigate("/dashboard")} // Thêm sự kiện click để điều hướng
+          onClick={() => navigate("/dashboard?tab=posts")} // Thêm sự kiện click để điều hướng
         >
           <img
             src={MainLogo}

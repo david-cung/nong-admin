@@ -1,4 +1,3 @@
-// PostList.tsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -61,6 +60,10 @@ export default function PostList() {
     navigate(`/edit-post/${id}`);
   };
 
+  const handleAddService = () => {
+    navigate("/add-service"); // Navigate to the "Add Service" page
+  };
+
   return (
     <div
       style={{
@@ -69,6 +72,33 @@ export default function PostList() {
         overflowY: "auto",
       }}
     >
+      {/* Top section with "Add Service" button */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          padding: "10px 20px",
+          backgroundColor: "#f9f9f9",
+          borderBottom: "1px solid #ddd",
+        }}
+      >
+        <button
+          onClick={handleAddService}
+          style={{
+            padding: "10px 15px",
+            backgroundColor: "#20C997",
+            color: "white",
+            border: "none",
+            borderRadius: "5px",
+            cursor: "pointer",
+            fontSize: "16px",
+          }}
+        >
+          Thêm dịch vụ
+        </button>
+      </div>
+
+      {/* Posts Table */}
       <table
         style={{
           width: "100%",

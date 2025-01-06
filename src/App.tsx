@@ -6,7 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import Projects from "./pages/Projects";
 import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute";
-import CreatePost from "./pages/CreatePost";
+import CreatePost from "./pages/CreateService";
 import PostList from "./pages/ListPost";
 import DetailPost from "./pages/EditPost";
 
@@ -21,7 +21,7 @@ export default function App() {
         <Route element={<PrivateRoute />}>
           <Route path='/' element={<Dashboard />} />
           <Route path='/dashboard' element={<Dashboard />} />
-          <Route path='/create-post' element={<CreatePost />} />
+          <Route path='/add-service' element={<CreatePost />} />
           <Route path='/list-post' element={<PostList />} />
           <Route path='/edit-post/:id' element={<DetailPost />} />
         </Route>
