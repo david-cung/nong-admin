@@ -1,6 +1,7 @@
 import { Sidebar } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { HiArrowSmRight, HiDocumentText, HiUser } from "react-icons/hi";
+import { HiNewspaper } from "react-icons/hi2";
 import { useLocation, useNavigate } from "react-router-dom";
 
 interface DashSidebarProps {
@@ -41,7 +42,14 @@ export default function DashSidebar({ setTab }: DashSidebarProps) {
             icon={HiDocumentText}
             onClick={() => handleNavigation("posts")}
           >
-            Posts
+            Dịch vụ
+          </Sidebar.Item>
+          <Sidebar.Item
+            active={tab === "services"}
+            icon={HiNewspaper}
+            onClick={() => handleNavigation("services")}
+          >
+            Tin tức
           </Sidebar.Item>
           <hr className='my-2 border-gray-300' />
           <Sidebar.Item

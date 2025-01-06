@@ -8,6 +8,7 @@ import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute";
 import CreatePost from "./pages/CreatePost";
 import PostList from "./pages/ListPost";
+import DetailPost from "./pages/EditPost";
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/create-post' element={<CreatePost />} />
           <Route path='/list-post' element={<PostList />} />
+          <Route path='/edit-post/:id' element={<DetailPost />} />
         </Route>
         <Route path='/projects' element={<Projects />} />
       </Routes>
