@@ -7,8 +7,8 @@ import Projects from "./pages/Projects";
 import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute";
 import CreatePost from "./pages/CreateService";
-import PostList from "./pages/ListPost";
-import DetailPost from "./pages/EditPost";
+import PostList from "./pages/ListService";
+import DetailPost from "./pages/EditService";
 
 export default function App() {
   return (
