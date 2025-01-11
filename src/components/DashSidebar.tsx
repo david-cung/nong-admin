@@ -38,16 +38,16 @@ export default function DashSidebar({ setTab }: DashSidebarProps) {
             Profile
           </Sidebar.Item>
           <Sidebar.Item
-            active={tab === "posts"}
+            active={tab === "services"}
             icon={HiDocumentText}
-            onClick={() => handleNavigation("posts")}
+            onClick={() => handleNavigation("services")}
           >
             Dịch vụ
           </Sidebar.Item>
           <Sidebar.Item
-            active={tab === "services"}
+            active={tab === "news"}
             icon={HiNewspaper}
-            onClick={() => handleNavigation("services")}
+            onClick={() => handleNavigation("news")}
           >
             Tin tức
           </Sidebar.Item>

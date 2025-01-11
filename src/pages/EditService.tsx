@@ -54,7 +54,7 @@ export default function EditPost() {
   const handleUploadImage = async () => {
     try {
       if (!file) {
-        setImageUploadError("Please select an image");
+        setImageUploadError("Hãy chọn ít nhất một ảnh");
         return;
       }
       setImageUploadError(null);

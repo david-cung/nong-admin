@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   getDownloadURL,
@@ -6,22 +5,51 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { Alert, Button, FileInput, Select, TextInput } from "flowbite-react";
-import { useState } from "react";
+import { Alert, Button, FileInput, TextInput } from "flowbite-react";
+import { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { app } from "../firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-export default function CreateService() {
+export default function EditNews() {
+  const { id } = useParams<{ id: string }>();
   const [file, setFile] = useState<any>(null);
   const [imageUploadProgress, setImageFileUploadProgress] = useState<any>(null);
   const [imageUploadError, setImageUploadError] = useState<any>(null);
-  const [formData, setFormData] = useState<any>({});
-  const [publishError, setPublishError] = useState<any>(null);
+  const [formData, setFormData] = useState<any>({
+    title: "",
+    image: "",
+    content: "",
+  });
+  const [fetchError, setFetchError] = useState<any>(null);
+  const [updateError, setUpdateError] = useState<any>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await fetch(`/v1/news/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!res.ok) {
+          throw new Error("Failed to fetch post details");
+        }
+        const data = await res.json();
+        setFormData(data.data);
+        setFetchError(null);
+      } catch (error: any) {
+        setFetchError(error.message);
+      }
+    };
+
+    fetchPost();
+  }, [id]);
 
   const handleUploadImage = async () => {
     try {
@@ -64,71 +92,61 @@ export default function CreateService() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("/v1/posts", {
-        method: "POST",
+      const res = await fetch(`/v1/posts/${id}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(formData),
       });
-      const data = await res.json();
       if (!res.ok) {
-        setPublishError("Failed to publish post");
+        setUpdateError("Failed to update post");
         return;
       }
-      console.log(data);
-      setPublishError(null);
-      navigate(`/dashboard?tab=posts`, { replace: true });
+      navigate(`/posts/${id}`, { replace: true });
     } catch (error: any) {
-      setPublishError(error.message);
+      setUpdateError(error.message);
     }
   };
 
   const handleContentChange = (value: string) => {
-    const cleanedContent = value.trim().replace(/^<p>(.*?)<\/p>$/s, "$1");
-    setFormData((prevData: any) => ({
+    setFormData((prevData) => ({
       ...prevData,
-      content: cleanedContent,
+      content: value,
     }));
   };
+
+  if (fetchError) {
+    return (
+      <div className='p-3 max-w-3xl mx-auto'>
+        <Alert color='failure'>{fetchError}</Alert>
+      </div>
+    );
+  }
 
   return (
     <div
       className='p-3 max-w-3xl mx-auto min-h-screen'
-      style={{ paddingTop: "60px" }} // Khoảng cách để tránh bị header che khuất
+      style={{ paddingTop: "70px" }}
     >
-      <h1 className='text-center text-3xl my-7 font-semibold'>Tạo dịch vụ</h1>
       <form
         className='flex flex-col gap-4'
-        style={{ minHeight: "calc(100vh - 120px)" }} // Giảm chiều cao của phần header và tạo đủ không gian cho form
+        style={{ minHeight: "calc(100vh - 120px)" }}
         onSubmit={handleSubmit}
       >
         <div className='flex flex-col gap-4 sm:flex-row justify-between'>
           <TextInput
             type='text'
-            placeholder='Nhập tiêu đề'
+            placeholder='Title'
             id='title'
-            className='flex-1'
+            value={formData.title}
             onChange={(e) =>
               setFormData({ ...formData, title: e.target.value })
             }
           />
-
-          <Select
-            onChange={(e) =>
-              setFormData({ ...formData, category: e.target.value })
-            }
-          >
-            <option value='uncategorized'>Loại dịch vụ</option>
-            <option value='Hiệu chuẩn, kiểm định'>Hiệu chuẩn, kiểm định</option>
-            <option value='Hiệu chuẩn tận nơi'>Hiệu chuẩn tận nơi</option>
-            <option value='Đào tạo và huấn luyện'>Đào tạo và huấn luyện</option>
-            <option value='Bảo trì-sửa chữa'>Bảo trì-sửa chữa</option>
-          </Select>
         </div>
 
-        {/* Upload image section */}
         <div className='flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3'>
           <FileInput
             type='file'
@@ -158,14 +176,12 @@ export default function CreateService() {
           </Button>
         </div>
 
-        {/* Show image upload error */}
         {imageUploadError && (
           <Alert className='mt-5' color='failure'>
             {imageUploadError}
           </Alert>
         )}
 
-        {/* Show uploaded image */}
         {formData.image && (
           <img
             src={formData.image}
@@ -174,26 +190,24 @@ export default function CreateService() {
           />
         )}
 
-        {/* Content editor */}
         <ReactQuill
           theme='snow'
-          placeholder='Nhập nội dung...'
+          placeholder='Edit your content...'
+          value={formData.content}
           className='h-72 mb-12'
           onChange={handleContentChange}
         />
 
-        {/* Publish button */}
         <Button
           type='submit'
           className='bg-gradient-to-r from-blue-500 to-green-500 text-white p-2 rounded mt-5'
         >
-          Tạo mới
+          Update Post
         </Button>
 
-        {/* Show publish error */}
-        {publishError && (
+        {updateError && (
           <Alert className='mt-5' color='failure'>
-            {publishError}
+            {updateError}
           </Alert>
         )}
       </form>

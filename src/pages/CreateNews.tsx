@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   getDownloadURL,
@@ -15,7 +14,7 @@ import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { useNavigate } from "react-router-dom";
 
-export default function CreateService() {
+export default function CreateNews() {
   const [file, setFile] = useState<any>(null);
   const [imageUploadProgress, setImageFileUploadProgress] = useState<any>(null);
   const [imageUploadError, setImageUploadError] = useState<any>(null);
@@ -42,7 +41,7 @@ export default function CreateService() {
           setImageFileUploadProgress(progress.toFixed(0));
         },
         (error) => {
-          setImageUploadError("Image upload failed");
+          setImageUploadError("Tải hình ảnh bị lỗi");
           setImageFileUploadProgress(null);
         },
         () => {
@@ -54,7 +53,7 @@ export default function CreateService() {
         }
       );
     } catch (error) {
-      setImageUploadError("Image upload failed");
+      setImageUploadError("Tải hình ảnh bị lỗi");
       setImageFileUploadProgress(null);
       console.log(error);
     }
@@ -64,7 +63,7 @@ export default function CreateService() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("/v1/posts", {
+      const res = await fetch("/v1/news", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -74,12 +73,12 @@ export default function CreateService() {
       });
       const data = await res.json();
       if (!res.ok) {
-        setPublishError("Failed to publish post");
+        setPublishError("Lỗi công khai tin tức");
         return;
       }
       console.log(data);
       setPublishError(null);
-      navigate(`/dashboard?tab=posts`, { replace: true });
+      navigate(`/dashboard?tab=news`, { replace: true });
     } catch (error: any) {
       setPublishError(error.message);
     }
@@ -87,7 +86,7 @@ export default function CreateService() {
 
   const handleContentChange = (value: string) => {
     const cleanedContent = value.trim().replace(/^<p>(.*?)<\/p>$/s, "$1");
-    setFormData((prevData: any) => ({
+    setFormData((prevData) => ({
       ...prevData,
       content: cleanedContent,
     }));
@@ -115,7 +114,7 @@ export default function CreateService() {
             }
           />
 
-          <Select
+          {/* <Select
             onChange={(e) =>
               setFormData({ ...formData, category: e.target.value })
             }
@@ -125,7 +124,7 @@ export default function CreateService() {
             <option value='Hiệu chuẩn tận nơi'>Hiệu chuẩn tận nơi</option>
             <option value='Đào tạo và huấn luyện'>Đào tạo và huấn luyện</option>
             <option value='Bảo trì-sửa chữa'>Bảo trì-sửa chữa</option>
-          </Select>
+          </Select> */}
         </div>
 
         {/* Upload image section */}

@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import MainLogo from "../assets/logo/MainLogo.png";
 

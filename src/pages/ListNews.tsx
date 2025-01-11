@@ -11,7 +11,7 @@ interface Post {
   category: string; // New field to store service type (category)
 }
 
-export default function ServiceList() {
+export default function NewsList() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState<
     string | null
@@ -21,7 +21,7 @@ export default function ServiceList() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get("/v1/posts", {
+        const response = await axios.get("/v1/news", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -58,11 +58,11 @@ export default function ServiceList() {
   };
 
   const handleEdit = (id: string) => {
-    navigate(`/edit-post/${id}`);
+    navigate(`/edit-news/${id}`);
   };
 
   const handleAddService = () => {
-    navigate("/add-service"); // Navigate to the "Add Service" page
+    navigate("/add-news"); // Navigate to the "Add Service" page
   };
 
   return (
@@ -95,7 +95,7 @@ export default function ServiceList() {
             fontSize: "16px",
           }}
         >
-          Thêm dịch vụ
+          Thêm tin tức
         </button>
       </div>
 

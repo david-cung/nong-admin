@@ -4,7 +4,8 @@ import { useLocation } from "react-router-dom";
 import DashSidebar from "../components/DashSidebar";
 import DashProfile from "../components/DashProfile";
 import Header from "../components/Header"; // Đừng quên import Header
-import PostList from "./ListService";
+import ServiceList from "./ListService";
+import NewsList from "./ListNews";
 
 export default function Dashboard() {
   const location = useLocation();
@@ -33,7 +34,8 @@ export default function Dashboard() {
           style={{ padding: "20px", height: "calc(100vh - 60px)" }} // Đảm bảo chiều cao của phần nội dung chính
         >
           {tab === "profile" && <DashProfile />}
-          {tab === "posts" && <PostList />}
+          {tab === "services" && <ServiceList />}
+          {tab === "news" && <NewsList />}
         </div>
       </div>
     </div>
