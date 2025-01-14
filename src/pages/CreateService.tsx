@@ -85,6 +85,10 @@ export default function CreateService() {
     }
   };
 
+  const handleCancel = () => {
+    navigate(-1); // Quay lại trang trước đó
+  };
+
   const handleContentChange = (value: string) => {
     const cleanedContent = value.trim().replace(/^<p>(.*?)<\/p>$/s, "$1");
     setFormData((prevData: any) => ({
@@ -188,6 +192,15 @@ export default function CreateService() {
           className='bg-gradient-to-r from-blue-500 to-green-500 text-white p-2 rounded mt-5'
         >
           Tạo mới
+        </Button>
+
+        {/* Cancel button */}
+        <Button
+          type='button'
+          className='bg-gray-500 text-white p-2 rounded mt-2'
+          onClick={handleCancel}
+        >
+          Hủy bỏ
         </Button>
 
         {/* Show publish error */}

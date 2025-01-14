@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   getDownloadURL,
@@ -14,7 +15,7 @@ import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { useNavigate } from "react-router-dom";
 
-export default function CreateNews() {
+export default function CreateService() {
   const [file, setFile] = useState<any>(null);
   const [imageUploadProgress, setImageFileUploadProgress] = useState<any>(null);
   const [imageUploadError, setImageUploadError] = useState<any>(null);
@@ -41,7 +42,7 @@ export default function CreateNews() {
           setImageFileUploadProgress(progress.toFixed(0));
         },
         (error) => {
-          setImageUploadError("Tải hình ảnh bị lỗi");
+          setImageUploadError("Image upload failed");
           setImageFileUploadProgress(null);
         },
         () => {
@@ -53,7 +54,7 @@ export default function CreateNews() {
         }
       );
     } catch (error) {
-      setImageUploadError("Tải hình ảnh bị lỗi");
+      setImageUploadError("Image upload failed");
       setImageFileUploadProgress(null);
       console.log(error);
     }
@@ -63,7 +64,7 @@ export default function CreateNews() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("/v1/news", {
+      const res = await fetch("/v1/posts", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -73,20 +74,24 @@ export default function CreateNews() {
       });
       const data = await res.json();
       if (!res.ok) {
-        setPublishError("Lỗi công khai tin tức");
+        setPublishError("Failed to publish post");
         return;
       }
       console.log(data);
       setPublishError(null);
-      navigate(`/dashboard?tab=news`, { replace: true });
+      navigate(`/dashboard?tab=posts`, { replace: true });
     } catch (error: any) {
       setPublishError(error.message);
     }
   };
 
+  const handleCancel = () => {
+    navigate(-1); // Quay lại trang trước đó
+  };
+
   const handleContentChange = (value: string) => {
     const cleanedContent = value.trim().replace(/^<p>(.*?)<\/p>$/s, "$1");
-    setFormData((prevData) => ({
+    setFormData((prevData: any) => ({
       ...prevData,
       content: cleanedContent,
     }));
@@ -114,7 +119,7 @@ export default function CreateNews() {
             }
           />
 
-          {/* <Select
+          <Select
             onChange={(e) =>
               setFormData({ ...formData, category: e.target.value })
             }
@@ -124,7 +129,7 @@ export default function CreateNews() {
             <option value='Hiệu chuẩn tận nơi'>Hiệu chuẩn tận nơi</option>
             <option value='Đào tạo và huấn luyện'>Đào tạo và huấn luyện</option>
             <option value='Bảo trì-sửa chữa'>Bảo trì-sửa chữa</option>
-          </Select> */}
+          </Select>
         </div>
 
         {/* Upload image section */}
@@ -187,6 +192,15 @@ export default function CreateNews() {
           className='bg-gradient-to-r from-blue-500 to-green-500 text-white p-2 rounded mt-5'
         >
           Tạo mới
+        </Button>
+
+        {/* Cancel button */}
+        <Button
+          type='button'
+          className='bg-gray-500 text-white p-2 rounded mt-2'
+          onClick={handleCancel}
+        >
+          Hủy bỏ
         </Button>
 
         {/* Show publish error */}
