@@ -5,7 +5,7 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { Alert, Button, FileInput, TextInput } from "flowbite-react";
+import { Alert, Button, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -69,6 +69,7 @@ export default function EditNews() {
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           setImageFileUploadProgress(progress.toFixed(0));
         },
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         (error) => {
           setImageUploadError("Image upload failed");
           setImageFileUploadProgress(null);
@@ -111,7 +112,7 @@ export default function EditNews() {
   };
 
   const handleContentChange = (value: string) => {
-    setFormData((prevData) => ({
+    setFormData((prevData: any) => ({
       ...prevData,
       content: value,
     }));
@@ -148,12 +149,13 @@ export default function EditNews() {
         </div>
 
         <div className='flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3'>
-          <FileInput
+          <input
             type='file'
             accept='image/*'
             onChange={(e) =>
               setFile(e.target?.files?.length ? e.target?.files[0] : null)
             }
+            className='file-input'
           />
           <Button
             type='button'

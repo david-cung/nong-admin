@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom"; // Import useNavigate
-import MainLogo from "../assets/logo/MainLogo.png";
+import MainLogo from "../assets/logo/MainLogo.jpg";
 
 const Header = () => {
   const navigate = useNavigate(); // Khởi tạo hook useNavigate
@@ -31,7 +31,7 @@ const Header = () => {
         <div
           className='logo'
           style={{ display: "flex", alignItems: "center", cursor: "pointer" }}
-          onClick={() => navigate("/dashboard?tab=posts")} // Thêm sự kiện click để điều hướng
+          onClick={() => navigate("/dashboard?tab=services")} // Thêm sự kiện click để điều hướng
         >
           <img
             src={MainLogo}
@@ -39,7 +39,7 @@ const Header = () => {
             style={{ width: "40px", height: "auto" }}
           />
           <span style={{ fontSize: "20px", fontWeight: "bold", color: "#fff" }}>
-            QUATEST 3<sup>®</sup>
+            INTEST 3<sup>®</sup>
           </span>
         </div>
       </div>

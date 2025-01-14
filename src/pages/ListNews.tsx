@@ -148,7 +148,7 @@ export default function NewsList() {
                 color: "white",
               }}
             >
-              Loại Dịch Vụ {/* New column for service type */}
+              Loại Tin tức {/* New column for service type */}
             </th>
             <th
               style={{
