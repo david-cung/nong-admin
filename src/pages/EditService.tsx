@@ -14,7 +14,7 @@ import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { useNavigate, useParams } from "react-router-dom";
 
-export default function EditPost() {
+export default function EditService() {
   const { id } = useParams<{ id: string }>();
   const [file, setFile] = useState<any>(null);
   const [imageUploadProgress, setImageFileUploadProgress] = useState<any>(null);
@@ -32,7 +32,7 @@ export default function EditPost() {
     const fetchPost = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch(`/v1/posts/${id}`, {
+        const res = await fetch(`/v1/services/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -92,7 +92,7 @@ export default function EditPost() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`/v1/posts/${id}`, {
+      const res = await fetch(`/v1/services/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -104,7 +104,7 @@ export default function EditPost() {
         setUpdateError("Failed to update post");
         return;
       }
-      navigate(`/posts/${id}`, { replace: true });
+      navigate(`/services/${id}`, { replace: true });
     } catch (error: any) {
       setUpdateError(error.message);
     }
@@ -202,7 +202,7 @@ export default function EditPost() {
           type='submit'
           className='bg-gradient-to-r from-blue-500 to-green-500 text-white p-2 rounded mt-5'
         >
-          Update Post
+          Cập nhật
         </Button>
 
         {updateError && (

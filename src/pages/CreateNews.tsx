@@ -64,7 +64,7 @@ export default function CreateService() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("/v1/posts", {
+      const res = await fetch("/v1/news", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -79,7 +79,7 @@ export default function CreateService() {
       }
       console.log(data);
       setPublishError(null);
-      navigate(`/dashboard?tab=posts`, { replace: true });
+      navigate(`/dashboard?tab=news`, { replace: true });
     } catch (error: any) {
       setPublishError(error.message);
     }

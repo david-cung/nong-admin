@@ -12,7 +12,7 @@ interface Post {
 }
 
 export default function NewsList() {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [services, setPosts] = useState<Post[]>([]);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState<
     string | null
   >(null);
@@ -28,7 +28,7 @@ export default function NewsList() {
         });
         setPosts(response.data.data);
       } catch (error) {
-        console.error("Error fetching posts:", error);
+        console.error("Error fetching services:", error);
       }
     };
 
@@ -41,12 +41,12 @@ export default function NewsList() {
 
   const confirmDelete = async (id: string) => {
     try {
-      await axios.delete(`/v1/posts/${id}`, {
+      await axios.delete(`/v1/services/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      setPosts(posts.filter((post) => post.id !== id));
+      setPosts(services.filter((post) => post.id !== id));
       setShowDeleteConfirmation(null);
     } catch (error) {
       console.error("Error deleting post:", error);
@@ -163,7 +163,7 @@ export default function NewsList() {
           </tr>
         </thead>
         <tbody>
-          {posts.map((post) => (
+          {services.map((post) => (
             <tr
               key={post.id}
               style={{

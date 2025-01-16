@@ -64,7 +64,7 @@ export default function CreateService() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch("/v1/posts", {
+      const res = await fetch("/v1/services", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -74,12 +74,12 @@ export default function CreateService() {
       });
       const data = await res.json();
       if (!res.ok) {
-        setPublishError("Failed to publish post");
+        setPublishError("Failed to publish services");
         return;
       }
       console.log(data);
       setPublishError(null);
-      navigate(`/dashboard?tab=posts`, { replace: true });
+      navigate(`/dashboard?tab=services`, { replace: true });
     } catch (error: any) {
       setPublishError(error.message);
     }

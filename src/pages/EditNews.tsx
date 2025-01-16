@@ -93,7 +93,7 @@ export default function EditNews() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`/v1/posts/${id}`, {
+      const res = await fetch(`/v1/services/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -105,7 +105,7 @@ export default function EditNews() {
         setUpdateError("Failed to update post");
         return;
       }
-      navigate(`/posts/${id}`, { replace: true });
+      navigate(`/services/${id}`, { replace: true });
     } catch (error: any) {
       setUpdateError(error.message);
     }
