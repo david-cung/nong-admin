@@ -72,12 +72,10 @@ export default function CreateService() {
         },
         body: JSON.stringify(formData),
       });
-      const data = await res.json();
       if (!res.ok) {
         setPublishError("Failed to publish services");
         return;
       }
-      console.log(data);
       setPublishError(null);
       navigate(`/dashboard?tab=services`, { replace: true });
     } catch (error: any) {

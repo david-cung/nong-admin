@@ -7,9 +7,10 @@ import Projects from "./pages/Projects";
 import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute";
 import CreateService from "./pages/CreateService";
-import PostList from "./pages/ListService";
+import ServiceList from "./pages/ListService";
 import EditService from "./pages/EditService";
 import CreateNews from "./pages/CreateNews";
+import ServiceDetailPage from "./pages/ServiceDetailPage";
 
 export default function App() {
   return (
@@ -23,10 +24,12 @@ export default function App() {
           <Route path='/' element={<Dashboard />} />
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/add-service' element={<CreateService />} />
-          <Route path='/list-post' element={<PostList />} />
-          <Route path='/edit-post/:id' element={<EditService />} />
+          <Route path='/list-service' element={<ServiceList />} />
+          <Route path='/edit-service/:id' element={<EditService />} />
+          <Route path='/detail-service/:id' element={<ServiceDetailPage />} />
           <Route path='/add-news' element={<CreateNews />} />
           <Route path='/edit-news/:id' element={<EditService />} />
+          <Route path='/detail-news/:id' element={<EditService />} />
         </Route>
         <Route path='/projects' element={<Projects />} />
       </Routes>

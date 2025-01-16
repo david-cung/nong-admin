@@ -203,7 +203,7 @@ export default function DashProfile() {
             {updateUserError}
           </Alert>
         )}
-        <Link to={"/create-post"}>
+        <Link to={"/add-service"}>
           <Button
             type='button'
             gradientDuoTone='purpleToPink'

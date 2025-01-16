@@ -58,7 +58,7 @@ export default function ServiceList() {
   };
 
   const handleEdit = (id: string) => {
-    navigate(`/edit-post/${id}`);
+    navigate(`/edit-service/${id}`);
   };
 
   const handleAddService = () => {

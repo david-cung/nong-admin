@@ -104,7 +104,7 @@ export default function EditService() {
         setUpdateError("Failed to update post");
         return;
       }
-      navigate(`/services/${id}`, { replace: true });
+      navigate(`/detail-service/${id}`, { replace: true });
     } catch (error: any) {
       setUpdateError(error.message);
     }
