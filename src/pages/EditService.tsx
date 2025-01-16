@@ -205,6 +205,14 @@ export default function EditService() {
           Cập nhật
         </Button>
 
+        <Button
+          type='button'
+          className='bg-gradient-to-r from-red-500 to-orange-500 text-white p-2 rounded mt-3'
+          onClick={() => navigate(-1)}
+        >
+          Huỷ bỏ
+        </Button>
+
         {updateError && (
           <Alert className='mt-5' color='failure'>
             {updateError}
