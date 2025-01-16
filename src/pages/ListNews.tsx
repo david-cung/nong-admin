@@ -46,10 +46,10 @@ export default function NewsList() {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      setPosts(services.filter((post) => post.id !== id));
+      setPosts(services.filter((news) => news.id !== id));
       setShowDeleteConfirmation(null);
     } catch (error) {
-      console.error("Error deleting post:", error);
+      console.error("Error deleting news:", error);
     }
   };
 
@@ -163,9 +163,9 @@ export default function NewsList() {
           </tr>
         </thead>
         <tbody>
-          {services.map((post) => (
+          {services.map((news) => (
             <tr
-              key={post.id}
+              key={news.id}
               style={{
                 borderBottom: "0.5px solid #ddd",
                 padding: "2px",
@@ -178,7 +178,7 @@ export default function NewsList() {
                   fontSize: "16px",
                 }}
               >
-                {new Date(post.updatedAt).toLocaleDateString()}
+                {new Date(news.updatedAt).toLocaleDateString()}
               </td>
               <td
                 style={{
@@ -187,8 +187,8 @@ export default function NewsList() {
                 }}
               >
                 <img
-                  src={post.image}
-                  alt={post.title}
+                  src={news.image}
+                  alt={news.title}
                   style={{
                     width: "150px",
                     height: "150px",
@@ -202,9 +202,13 @@ export default function NewsList() {
                   padding: "2px",
                   textAlign: "left",
                   fontSize: "16px",
+                  cursor: "pointer",
+                  color: "blue",
+                  textDecoration: "underline",
                 }}
+                onClick={() => navigate(`/detail-service/${news.id}`)}
               >
-                {post.title}
+                {news.title}
               </td>
               <td
                 style={{
@@ -213,7 +217,7 @@ export default function NewsList() {
                   fontSize: "16px",
                 }}
               >
-                {post.category} {/* Display service type */}
+                {news.category} {/* Display service type */}
               </td>
               <td
                 style={{
@@ -221,11 +225,11 @@ export default function NewsList() {
                   textAlign: "center",
                 }}
               >
-                {showDeleteConfirmation === post.id ? (
+                {showDeleteConfirmation === news.id ? (
                   <div>
                     <p>Bạn có chắc chắn muốn xoá dịch vụ này?</p>
                     <button
-                      onClick={() => confirmDelete(post.id)}
+                      onClick={() => confirmDelete(news.id)}
                       style={{
                         padding: "5px 10px",
                         backgroundColor: "#FF5733",
@@ -255,7 +259,7 @@ export default function NewsList() {
                 ) : (
                   <>
                     <button
-                      onClick={() => handleEdit(post.id)}
+                      onClick={() => handleEdit(news.id)}
                       style={{
                         padding: "5px 10px",
                         backgroundColor: "#FFA500",
@@ -269,7 +273,7 @@ export default function NewsList() {
                       Chỉnh Sửa
                     </button>
                     <button
-                      onClick={() => handleDelete(post.id)}
+                      onClick={() => handleDelete(news.id)}
                       style={{
                         padding: "5px 10px",
                         backgroundColor: "#FF5733",

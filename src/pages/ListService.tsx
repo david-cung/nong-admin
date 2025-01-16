@@ -46,10 +46,10 @@ export default function ServiceList() {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      setPosts(services.filter((post) => post.id !== id));
+      setPosts(services.filter((service) => service.id !== id));
       setShowDeleteConfirmation(null);
     } catch (error) {
-      console.error("Error deleting post:", error);
+      console.error("Error deleting service:", error);
     }
   };
 
@@ -163,9 +163,9 @@ export default function ServiceList() {
           </tr>
         </thead>
         <tbody>
-          {services.map((post) => (
+          {services.map((service) => (
             <tr
-              key={post.id}
+              key={service.id}
               style={{
                 borderBottom: "0.5px solid #ddd",
                 padding: "2px",
@@ -178,7 +178,7 @@ export default function ServiceList() {
                   fontSize: "16px",
                 }}
               >
-                {new Date(post.updatedAt).toLocaleDateString()}
+                {new Date(service.updatedAt).toLocaleDateString()}
               </td>
               <td
                 style={{
@@ -187,8 +187,8 @@ export default function ServiceList() {
                 }}
               >
                 <img
-                  src={post.image}
-                  alt={post.title}
+                  src={service.image}
+                  alt={service.title}
                   style={{
                     width: "150px",
                     height: "150px",
@@ -202,9 +202,13 @@ export default function ServiceList() {
                   padding: "2px",
                   textAlign: "left",
                   fontSize: "16px",
+                  cursor: "pointer",
+                  color: "blue",
+                  textDecoration: "underline",
                 }}
+                onClick={() => navigate(`/detail-service/${service.id}`)}
               >
-                {post.title}
+                {service.title}
               </td>
               <td
                 style={{
@@ -213,7 +217,7 @@ export default function ServiceList() {
                   fontSize: "16px",
                 }}
               >
-                {post.category} {/* Display service type */}
+                {service.category} {/* Display service type */}
               </td>
               <td
                 style={{
@@ -221,11 +225,11 @@ export default function ServiceList() {
                   textAlign: "center",
                 }}
               >
-                {showDeleteConfirmation === post.id ? (
+                {showDeleteConfirmation === service.id ? (
                   <div>
                     <p>Bạn có chắc chắn muốn xoá dịch vụ này?</p>
                     <button
-                      onClick={() => confirmDelete(post.id)}
+                      onClick={() => confirmDelete(service.id)}
                       style={{
                         padding: "5px 10px",
                         backgroundColor: "#FF5733",
@@ -255,7 +259,7 @@ export default function ServiceList() {
                 ) : (
                   <>
                     <button
-                      onClick={() => handleEdit(post.id)}
+                      onClick={() => handleEdit(service.id)}
                       style={{
                         padding: "5px 10px",
                         backgroundColor: "#FFA500",
@@ -269,7 +273,7 @@ export default function ServiceList() {
                       Chỉnh Sửa
                     </button>
                     <button
-                      onClick={() => handleDelete(post.id)}
+                      onClick={() => handleDelete(service.id)}
                       style={{
                         padding: "5px 10px",
                         backgroundColor: "#FF5733",

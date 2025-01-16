@@ -11,6 +11,8 @@ import ServiceList from "./pages/ListService";
 import EditService from "./pages/EditService";
 import CreateNews from "./pages/CreateNews";
 import ServiceDetailPage from "./pages/ServiceDetailPage";
+import EditNews from "./pages/EditNews";
+import NewDetailPage from "./pages/NewsDetailPage";
 
 export default function App() {
   return (
@@ -28,8 +30,8 @@ export default function App() {
           <Route path='/edit-service/:id' element={<EditService />} />
           <Route path='/detail-service/:id' element={<ServiceDetailPage />} />
           <Route path='/add-news' element={<CreateNews />} />
-          <Route path='/edit-news/:id' element={<EditService />} />
-          <Route path='/detail-news/:id' element={<EditService />} />
+          <Route path='/edit-news/:id' element={<EditNews />} />
+          <Route path='/detail-news/:id' element={<NewDetailPage />} />
         </Route>
         <Route path='/projects' element={<Projects />} />
       </Routes>

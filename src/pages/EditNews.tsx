@@ -5,7 +5,7 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { Alert, Button, TextInput } from "flowbite-react";
+import { Alert, Button, FileInput, TextInput } from "flowbite-react";
 import { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -69,7 +69,6 @@ export default function EditNews() {
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           setImageFileUploadProgress(progress.toFixed(0));
         },
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         (error) => {
           setImageUploadError("Image upload failed");
           setImageFileUploadProgress(null);
@@ -93,7 +92,7 @@ export default function EditNews() {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`/v1/services/${id}`, {
+      const res = await fetch(`/v1/news/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -105,14 +104,14 @@ export default function EditNews() {
         setUpdateError("Failed to update post");
         return;
       }
-      navigate(`/services/${id}`, { replace: true });
+      navigate(`/detail-news/${id}`, { replace: true });
     } catch (error: any) {
       setUpdateError(error.message);
     }
   };
 
   const handleContentChange = (value: string) => {
-    setFormData((prevData: any) => ({
+    setFormData((prevData) => ({
       ...prevData,
       content: value,
     }));
@@ -149,13 +148,12 @@ export default function EditNews() {
         </div>
 
         <div className='flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3'>
-          <input
+          <FileInput
             type='file'
             accept='image/*'
             onChange={(e) =>
               setFile(e.target?.files?.length ? e.target?.files[0] : null)
             }
-            className='file-input'
           />
           <Button
             type='button'
@@ -204,7 +202,15 @@ export default function EditNews() {
           type='submit'
           className='bg-gradient-to-r from-blue-500 to-green-500 text-white p-2 rounded mt-5'
         >
-          Update Post
+          Cập nhật
+        </Button>
+
+        <Button
+          type='button'
+          className='bg-gradient-to-r from-red-500 to-orange-500 text-white p-2 rounded mt-3'
+          onClick={() => navigate(-1)}
+        >
+          Huỷ bỏ
         </Button>
 
         {updateError && (
