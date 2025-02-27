@@ -16,14 +16,24 @@ import "react-circular-progressbar/dist/styles.css";
 import { useNavigate } from "react-router-dom";
 
 export default function CreateService() {
+  const [contentBlocks, setContentBlocks] = useState<any[]>([]);
   const [file, setFile] = useState<any>(null);
-  const [imageUploadProgress, setImageFileUploadProgress] = useState<any>(null);
-  const [imageUploadError, setImageUploadError] = useState<any>(null);
+  const [imageUploadProgress, setImageFileUploadProgress] = useState<
+    number | null
+  >(null);
+  const [imageUploadError, setImageUploadError] = useState<string | null>(null);
   const [formData, setFormData] = useState<any>({});
-  const [publishError, setPublishError] = useState<any>(null);
+  const [publishError, setPublishError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const handleUploadImage = async () => {
+  const handleAddTextBlock = (text: string) => {
+    setContentBlocks((prevBlocks) => [
+      ...prevBlocks,
+      { type: "text", content: text },
+    ]);
+  };
+
+  const handleAddImageBlock = async () => {
     try {
       if (!file) {
         setImageUploadError("Hãy chọn ít nhất một ảnh");
@@ -39,17 +49,20 @@ export default function CreateService() {
         (snapshot) => {
           const progress =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setImageFileUploadProgress(progress.toFixed(0));
+          setImageFileUploadProgress(progress);
         },
         (error) => {
+          console.log("err", error);
           setImageUploadError("Image upload failed");
           setImageFileUploadProgress(null);
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((url) => {
             setImageFileUploadProgress(null);
-            setImageUploadError(null);
-            setFormData({ ...formData, image: url });
+            setContentBlocks((prevBlocks) => [
+              ...prevBlocks,
+              { type: "image", content: url },
+            ]);
           });
         }
       );
@@ -70,7 +83,7 @@ export default function CreateService() {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, contentBlocks }),
       });
       if (!res.ok) {
         setPublishError("Failed to publish services");
@@ -84,26 +97,18 @@ export default function CreateService() {
   };
 
   const handleCancel = () => {
-    navigate(-1); // Quay lại trang trước đó
-  };
-
-  const handleContentChange = (value: string) => {
-    const cleanedContent = value.trim().replace(/^<p>(.*?)<\/p>$/s, "$1");
-    setFormData((prevData: any) => ({
-      ...prevData,
-      content: cleanedContent,
-    }));
+    navigate(-1);
   };
 
   return (
     <div
       className='p-3 max-w-3xl mx-auto min-h-screen'
-      style={{ paddingTop: "60px" }} // Khoảng cách để tránh bị header che khuất
+      style={{ paddingTop: "60px" }}
     >
       <h1 className='text-center text-3xl my-7 font-semibold'>Tạo dịch vụ</h1>
       <form
         className='flex flex-col gap-4'
-        style={{ minHeight: "calc(100vh - 120px)" }} // Giảm chiều cao của phần header và tạo đủ không gian cho form
+        style={{ minHeight: "calc(100vh - 120px)" }}
         onSubmit={handleSubmit}
       >
         <div className='flex flex-col gap-4 sm:flex-row justify-between'>
@@ -130,10 +135,15 @@ export default function CreateService() {
           </Select>
         </div>
 
-        {/* Upload image section */}
-        <div className='flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3'>
+        {/* Add content blocks */}
+        <div className='flex flex-col gap-4 border p-4'>
+          <ReactQuill
+            theme='snow'
+            placeholder='Nhập nội dung...'
+            className='mb-4'
+            onChange={(value) => handleAddTextBlock(value)}
+          />
           <FileInput
-            type='file'
             accept='image/*'
             onChange={(e) =>
               setFile(e.target?.files?.length ? e.target?.files[0] : null)
@@ -144,45 +154,44 @@ export default function CreateService() {
             gradientDuoTone='purpleToBlue'
             size='sm'
             outline
-            onClick={handleUploadImage}
-            disabled={imageUploadProgress}
+            onClick={handleAddImageBlock}
+            disabled={imageUploadProgress !== null}
           >
-            {imageUploadProgress ? (
+            {imageUploadProgress !== null ? (
               <div className='w-16 h-16'>
                 <CircularProgressbar
                   value={imageUploadProgress}
-                  text={`${imageUploadProgress}%`}
+                  text={`${imageUploadProgress.toFixed(0)}%`}
                 />
               </div>
             ) : (
               "Upload Image"
             )}
           </Button>
+
+          {imageUploadError && (
+            <Alert color='failure' className='mt-4'>
+              {imageUploadError}
+            </Alert>
+          )}
         </div>
 
-        {/* Show image upload error */}
-        {imageUploadError && (
-          <Alert className='mt-5' color='failure'>
-            {imageUploadError}
-          </Alert>
-        )}
-
-        {/* Show uploaded image */}
-        {formData.image && (
-          <img
-            src={formData.image}
-            alt='upload'
-            className='w-full h-72 object-cover'
-          />
-        )}
-
-        {/* Content editor */}
-        <ReactQuill
-          theme='snow'
-          placeholder='Nhập nội dung...'
-          className='h-72 mb-12'
-          onChange={handleContentChange}
-        />
+        {/* Preview content blocks */}
+        <div className='mt-4'>
+          {contentBlocks.map((block, index) => (
+            <div key={index} className='my-4'>
+              {block.type === "text" ? (
+                <div dangerouslySetInnerHTML={{ __html: block.content }} />
+              ) : (
+                <img
+                  src={block.content}
+                  alt='Uploaded'
+                  className='w-full h-auto'
+                />
+              )}
+            </div>
+          ))}
+        </div>
 
         {/* Publish button */}
         <Button

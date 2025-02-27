@@ -70,6 +70,7 @@ export default function EditService() {
           setImageFileUploadProgress(progress.toFixed(0));
         },
         (error) => {
+          console.log("err", error);
           setImageUploadError("Image upload failed");
           setImageFileUploadProgress(null);
         },
@@ -111,7 +112,7 @@ export default function EditService() {
   };
 
   const handleContentChange = (value: string) => {
-    setFormData((prevData) => ({
+    setFormData((prevData: any) => ({
       ...prevData,
       content: value,
     }));
@@ -149,7 +150,6 @@ export default function EditService() {
 
         <div className='flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3'>
           <FileInput
-            type='file'
             accept='image/*'
             onChange={(e) =>
               setFile(e.target?.files?.length ? e.target?.files[0] : null)

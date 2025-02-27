@@ -42,6 +42,7 @@ export default function CreateService() {
           setImageFileUploadProgress(progress.toFixed(0));
         },
         (error) => {
+          console.log(error);
           setImageUploadError("Image upload failed");
           setImageFileUploadProgress(null);
         },
@@ -135,7 +136,6 @@ export default function CreateService() {
         {/* Upload image section */}
         <div className='flex gap-4 items-center justify-between border-4 border-teal-500 border-dotted p-3'>
           <FileInput
-            type='file'
             accept='image/*'
             onChange={(e) =>
               setFile(e.target?.files?.length ? e.target?.files[0] : null)
