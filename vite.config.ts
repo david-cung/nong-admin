@@ -12,5 +12,6 @@ export default defineConfig({
       },
     },
   },
+  base: "/app2/",
   plugins: [react()],
 });
