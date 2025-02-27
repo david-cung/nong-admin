@@ -12,6 +12,6 @@ export default defineConfig({
       },
     },
   },
-  base: "/app2/",
+  base: "/admin/",
   plugins: [react()],
 });
